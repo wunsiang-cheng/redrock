@@ -51,30 +51,6 @@
         </div>
       </section>
 
-      <section class="demo" id="demo" aria-labelledby="demo-title">
-        <div class="demo-copy">
-          <p class="eyebrow">TELEGRAM</p>
-          <h2 id="demo-title">Progress and replies.</h2>
-          <p class="lede">A progress message shows elapsed time, the current step, and shell commands before execution. It is replaced or removed when the turn ends.</p>
-          <p class="stat"><b>RUST + SQLITE</b><span>one executable, persistent state, and no separate runtime.</span></p>
-          <p class="footnote">Progress format illustration.</p>
-        </div>
-        <div class="chat" role="img" aria-label="A Telegram chat showing command progress followed by a disk usage reply.">
-          <div class="chat-bar" aria-hidden="true">
-            <span class="chat-mark">R</span>
-            <span class="chat-who"><b>RedRock</b><i>bot</i></span>
-          </div>
-          <div class="chat-body" aria-hidden="true">
-            <p class="msg out">which directory uses the most space?</p>
-            <p class="msg in work" id="chat-work">
-              <b>Working &middot; <span id="chat-time">1s</span> &middot; step <span id="chat-step">1</span></b>
-              <span id="chat-doing">thinking</span>
-            </p>
-            <p class="msg in reply" id="chat-reply" hidden><b>Downloads</b> is the largest directory.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="features" id="features" aria-labelledby="features-title">
         <div class="section-heading">
           <p class="eyebrow">CAPABILITIES</p>
@@ -151,44 +127,9 @@
               watcher.unobserve(entry.target);
             });
           }, { rootMargin: '0px 0px -12% 0px' });
-          document.querySelectorAll('.demo-copy, .chat, .section-heading, .cards li, .warning')
+          document.querySelectorAll('.section-heading, .cards li, .warning')
             .forEach(function (node) { node.classList.add('reveal'); watcher.observe(node); });
         }
-
-        // Simulate a turn.
-        var steps = [
-          { time: '1s', step: 1, doing: 'thinking' },
-          { time: '3s', step: 2, doing: '$ du -s "$HOME"/*' },
-          { time: '6s', step: 3, doing: '$ sort -nr | head -1' }
-        ];
-        var work = document.getElementById('chat-work');
-        var reply = document.getElementById('chat-reply');
-        var time = document.getElementById('chat-time');
-        var step = document.getElementById('chat-step');
-        var doing = document.getElementById('chat-doing');
-        if (still) {
-          work.hidden = true;
-          reply.hidden = false;
-          return;
-        }
-        var at = 0;
-        var run = function () {
-          if (at < steps.length) {
-            work.hidden = false;
-            reply.hidden = true;
-            time.textContent = steps[at].time;
-            step.textContent = steps[at].step;
-            doing.textContent = steps[at].doing;
-            at += 1;
-            return setTimeout(run, 1900);
-          }
-          // Replace progress with the reply.
-          work.hidden = true;
-          reply.hidden = false;
-          at = 0;
-          setTimeout(run, 5200);
-        };
-        run();
       })();
     </script>
   </body>
