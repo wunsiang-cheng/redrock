@@ -1,0 +1,45 @@
+name: Windows
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test --locked
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo build --release --locked
+      - name: Name executable
+        shell: pwsh
+        run: |
+          $version = (Select-String '^version = "(.+)"$' Cargo.toml).Matches.Groups[1].Value
+          Copy-Item target/release/redrock.exe "redrock-v$version-windows-x86_64.exe"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: redrock-windows-x86_64
+          path: redrock-*-windows-x86_64.exe
+      - name: Upload release asset
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          gh release view "${{ github.ref_name }}" 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            $prerelease = if ("${{ github.ref_name }}" -match '-') { '--prerelease' } else { $null }
+            gh release create "${{ github.ref_name }}" --verify-tag --generate-notes $prerelease
+          }
+          gh release upload "${{ github.ref_name }}" redrock-*-windows-x86_64.exe --clobber

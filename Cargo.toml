@@ -1,0 +1,15 @@
+[package]
+name = "redrock"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+eframe = { version = "0.36", default-features = false, features = ["default_fonts", "glow"] }
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "multipart", "rustls-tls"] }
+rpassword = "7"
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+eframe = { version = "0.36", default-features = false, features = ["wayland", "x11"] }

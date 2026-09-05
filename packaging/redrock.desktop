@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=RedRock Setup
+Comment=Install and configure RedRock
+Exec=redrock install
+Icon=redrock
+Terminal=false
+Categories=Utility;
+StartupNotify=true
